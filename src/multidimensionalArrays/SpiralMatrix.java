@@ -14,8 +14,6 @@ class SpiralMatrixSolution
 {
 	public int[][] generateMatrix(int n) {
 		
-		int[][] m = generateSimpleMatrix(n);
-		
 		int topRow = 0;
 		int topColStart = 0;
 		int topColEnd = n-1;
@@ -43,17 +41,7 @@ class SpiralMatrixSolution
 			//top loop
 			for(int i=topColStart; i<=topColEnd; i++)
 			{
-				System.out.print(m[topRow][i]+" ");
-				spiralMatrix[spiral_i][spiral_j] = m[topRow][i];
-				//spiral_j++;
-				if(spiral_j == n-1)
-				{
-					spiral_i++;
-					spiral_j=0;
-				}
-				else {
-					spiral_j++;
-				}
+				spiralMatrix[topRow][i] = spiralIndexCount;
 				spiralIndexCount++;
 				
 			}
@@ -62,16 +50,7 @@ class SpiralMatrixSolution
 			
 			for(int i=rightRowStart; i<=rightRowEnd; i++)
 			{
-				System.out.print(m[i][rightCol]+" ");
-				spiralMatrix[spiral_i][spiral_j] = m[i][rightCol];
-				if(spiral_j == n-1)
-				{
-					spiral_i++;
-					spiral_j=0;
-				}
-				else {
-					spiral_j++;
-				}				
+				spiralMatrix[i][rightCol] = spiralIndexCount;	
 				spiralIndexCount++;
 			}
 			rightCol--; rightRowStart++; rightRowEnd--;
@@ -79,16 +58,7 @@ class SpiralMatrixSolution
 			
 			for(int i=bottomColStart; i>= bottomColEnd; i--)
 			{
-				System.out.print(m[bottomRow][i]+" ");
-				spiralMatrix[spiral_i][spiral_j] = m[bottomRow][i];
-				if(spiral_j == n-1)
-				{
-					spiral_i++;
-					spiral_j=0;
-				}
-				else {
-					spiral_j++;
-				}	
+				spiralMatrix[bottomRow][i] = spiralIndexCount;	
 				spiralIndexCount++;
 			}
 			bottomRow--; bottomColStart--; bottomColEnd++;
@@ -96,16 +66,7 @@ class SpiralMatrixSolution
 			
 			for(int i=leftRowStart; i>=leftRowEnd; i--)
 			{
-				System.out.print(m[i][leftCol]+" ");
-				spiralMatrix[spiral_i][spiral_j] = m[i][leftCol];
-				if(spiral_j == n-1)
-				{
-					spiral_i++;
-					spiral_j=0;
-				}
-				else {
-					spiral_j++;
-				}	
+				spiralMatrix[i][leftCol] = spiralIndexCount;		
 				spiralIndexCount++;
 			}
 			leftCol++; leftRowStart--; leftRowEnd++;
