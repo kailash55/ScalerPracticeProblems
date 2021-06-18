@@ -6,7 +6,7 @@ public class ConstructArray {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println(new ConstructArraySolution().solve(5, 20, 50));
+		System.out.println(new ConstructArraySolution().solve(7, 39, 41));
 	}
 
 }
@@ -15,55 +15,92 @@ class ConstructArraySolution
 {
 	public ArrayList<Integer> solve(final int A, final int B, final int C) {
 		
-		int diff = C - B;
-		int minDiffDivisor = 1;
-		int minDiff = Math.abs(diff - A);
+		ArrayList<Integer> divisors = new ArrayList<Integer>();
+		int difference = C - B;
 		
-		ArrayList<Integer> quoteints = new ArrayList<Integer>();
-		
-		for(int i=2; Math.pow(i, 2) <= C; i++)
+		int finalLeft = -1;
+		int finalDivisor = -1;
+		int lowestRightCount = -1;
+		for(int i=1; Math.pow(i, 2) <= difference; i++)
 		{
-			if(diff%i == 0)
+			if(difference % i == 0)
 			{
+				divisors.add(i);
 				
-				quoteints.add(i);
-				quoteints.add(diff/i);
+				if(i != (difference/i))
+					divisors.add(difference/i);
 			}
 		}
 		
-		for(int j=0; j< quoteints.size(); j++)
+		
+		for(int i=0; i<divisors.size(); i++)
 		{
-			int i = quoteints.get(j);
-			int quo = diff / i;
-			if(quo > A)
-				continue;
-			int quoDiff = Math.abs(quo - A);
-			
-			if(quoDiff < minDiff)
+			int divisor = divisors.get(i);
+			boolean validDivisor = false;
+			int left = C;
+			int count = 0;
+			while(left > 0)
 			{
-				minDiff = quoDiff;
-				minDiffDivisor = i;
+				left = left - divisor;
+				count++;
+				
+				if(count == A)
+					break;
+			}
+			
+			left = left + divisor;
+			
+			
+			if(count == A && left <= B && left >= 0)
+			{
+				validDivisor = true;
+				if(left < finalLeft)
+				{
+					finalLeft = left;
+					finalDivisor = divisor;
+				}
+				continue;
+			}
+			
+			if(count == A && left > B)
+			{
+				validDivisor = false;
+			}
+			
+			if(count != A)
+			{
+//				if(finalLeft == -1 || left < finalLeft)
+//				{
+//					finalLeft = left;
+//					finalDivisor = divisor;
+//				}
+				int right = C;
+				int rightCount = 0;
+				while(count != A)
+				{
+					count++;
+					rightCount++;
+					right = right + divisor;
+				}
+				
+				if(lowestRightCount == -1 || rightCount <= lowestRightCount)
+				{
+					lowestRightCount = rightCount;
+					finalLeft = left;
+					finalDivisor = divisor;
+				}
 			}
 		}
 		
-		int start = 0;
-		if(C - (minDiffDivisor * A) < 0)
-		{
-			start = 0;
-		}
-		else
-		{
-			start = C - (minDiffDivisor * A);
-		}
 		
 		ArrayList<Integer> out = new ArrayList<Integer>();
-		
-		while(out.size()<=A)
+		out.add(finalLeft);
+		for(int i=2; i<=A; i++)
 		{
-			out.add(start);
-			start = start + minDiffDivisor;
+			finalLeft = finalLeft + finalDivisor;
+			out.add(finalLeft);
 		}
 		return out;
-    }
+	}
 }
 
