@@ -6,7 +6,7 @@ public class ConstructArray {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println(new ConstructArraySolution().solve(7, 39, 41));
+		System.out.println(new ConstructArraySolution().solve(3,10,39));
 	}
 
 }
@@ -18,9 +18,7 @@ class ConstructArraySolution
 		ArrayList<Integer> divisors = new ArrayList<Integer>();
 		int difference = C - B;
 		
-		int finalLeft = -1;
-		int finalDivisor = -1;
-		int lowestRightCount = -1;
+		
 		for(int i=1; Math.pow(i, 2) <= difference; i++)
 		{
 			if(difference % i == 0)
@@ -33,14 +31,17 @@ class ConstructArraySolution
 		}
 		
 		
+		ArrayList<ArrayList<Integer>> arraysList = new ArrayList<ArrayList<Integer>>();
 		for(int i=0; i<divisors.size(); i++)
 		{
+			ArrayList<Integer> arr = new ArrayList<Integer>();
 			int divisor = divisors.get(i);
 			boolean validDivisor = false;
 			int left = C;
 			int count = 0;
 			while(left > 0)
 			{
+				arr.add(0,left);
 				left = left - divisor;
 				count++;
 				
@@ -48,59 +49,39 @@ class ConstructArraySolution
 					break;
 			}
 			
-			left = left + divisor;
-			
-			
-			if(count == A && left <= B && left >= 0)
+			if(left <= B)
 			{
-				validDivisor = true;
-				if(left < finalLeft)
-				{
-					finalLeft = left;
-					finalDivisor = divisor;
-				}
-				continue;
-			}
-			
-			if(count == A && left > B)
-			{
-				validDivisor = false;
-			}
-			
-			if(count != A)
-			{
-//				if(finalLeft == -1 || left < finalLeft)
-//				{
-//					finalLeft = left;
-//					finalDivisor = divisor;
-//				}
-				int right = C;
-				int rightCount = 0;
+				int right = C + divisor;
 				while(count != A)
 				{
-					count++;
-					rightCount++;
+					arr.add(right);
 					right = right + divisor;
+					count++;
 				}
 				
-				if(lowestRightCount == -1 || rightCount <= lowestRightCount)
+				arraysList.add(arr);
+			}
+			
+		}
+		
+		ArrayList<Integer> outArray = new ArrayList<Integer>();
+		int lowestRight = Integer.MAX_VALUE;
+		for(int i=0; i<arraysList.size(); i++)
+		{
+			if(arraysList.get(i).get(arraysList.get(i).size() - 1) < lowestRight)
+			{
+				outArray = arraysList.get(i);
+				lowestRight = arraysList.get(i).get(arraysList.get(i).size() - 1);
+			}
+			else if(arraysList.get(i).get(arraysList.get(i).size() - 1) == lowestRight)
+			{
+				if(arraysList.get(i).get(0) < outArray.get(0))
 				{
-					lowestRightCount = rightCount;
-					finalLeft = left;
-					finalDivisor = divisor;
+					outArray = arraysList.get(i);
 				}
 			}
 		}
-		
-		
-		ArrayList<Integer> out = new ArrayList<Integer>();
-		out.add(finalLeft);
-		for(int i=2; i<=A; i++)
-		{
-			finalLeft = finalLeft + finalDivisor;
-			out.add(finalLeft);
-		}
-		return out;
+		return outArray;
 	}
 }
 
