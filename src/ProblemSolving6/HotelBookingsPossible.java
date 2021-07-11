@@ -2,6 +2,8 @@ package ProblemSolving6;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class HotelBookingsPossible {
 
@@ -20,50 +22,45 @@ class HotelBookingsPossibleSolution
 {
 	public boolean hotel(ArrayList<Integer> arrive, ArrayList<Integer> depart, int K) {
 		
-		int minArrive = Integer.MAX_VALUE;
-		int maxDepart = Integer.MIN_VALUE;
-		
-
-		for(int i=0; i<depart.size(); i++)
-		{
-			if(depart.get(i) > maxDepart)
-			{
-				maxDepart = depart.get(i);
-			}
-		}
-		
-		ArrayList<Integer> bookingArray = new ArrayList<Integer>();
-		for(int i=0; i<=maxDepart; i++)
-		{
-			bookingArray.add(0);
-		}
+		ArrayList<Integer> combinedBooking = new ArrayList<Integer>();
 		
 		for(int i=0; i<arrive.size(); i++)
 		{
-			int arriveTime = arrive.get(i);
-			int currentBooking = bookingArray.get(arriveTime);
-			bookingArray.set(arriveTime, currentBooking+1);
+			combinedBooking.add(arrive.get(i));
 		}
 		
 		for(int i=0; i<depart.size(); i++)
 		{
-			int departTime = depart.get(i);
-			if(departTime < maxDepart)
-			{
-			int currentBooking = bookingArray.get(departTime+1);
-			bookingArray.set(departTime+1, currentBooking-1);
-			}
+			combinedBooking.add(depart.get(i) * -1);
 		}
 		
-		if(bookingArray.get(0) > K)
-			return false;
+		Collections.sort(combinedBooking, new AbsoluteComparatory());
 		
-		for(int i=1; i<bookingArray.size(); i++)
+		int totalBookings = 0;
+		for(int i=0; i<combinedBooking.size();i++)
 		{
-			bookingArray.set(i, bookingArray.get(i) + bookingArray.get(i-1));
-			if(bookingArray.get(i) > K)
+			if(combinedBooking.get(i) >= 0)
+			{
+				totalBookings++;
+			}
+			else
+			{
+				totalBookings--;
+			}
+			
+			if(totalBookings > K)
 				return false;
 		}
+		
 		return true;
     }
+	
+	class AbsoluteComparatory implements Comparator<Integer> {
+	    // Used for sorting in ascending order of
+	    // roll number
+	    public int compare(Integer a, Integer b)
+	    {
+	        return Math.abs(a) - Math.abs(b);
+	    }
+	}
 }
