@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 
 
@@ -37,7 +38,13 @@ public class VideoDownload {
 				    while ((byteContent = inputStream.read()) != -1) {
 				        fileOS.write(byteContent);
 				    }
-				} catch (IOException e) {
+				 
+				} 
+				catch(UnknownHostException ex)
+				 {
+					 System.out.println("internet not available");
+				 }
+				catch (IOException e) {
 				    // handles IO exceptions
 					throw e;
 				}

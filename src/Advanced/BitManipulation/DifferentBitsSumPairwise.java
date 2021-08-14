@@ -17,19 +17,33 @@ public class DifferentBitsSumPairwise {
 
 class DifferentBitsSumPairwiseSolution
 {
+	
 	public int cntBits(ArrayList<Integer> A) {
-		long mod = (long) (Math.pow(10, 7) + 7);
-		long total = 0;
-		for(int i=0; i<A.size(); i++)
+		int mod = 1000 * 1000 * 1000 + 7;
+		long totalBits = 0;
+		for(int i=0; i<32; i++)
 		{
+			long count0 = 0;
+			long count1 = 0;
+			
 			for(int j=0; j<A.size(); j++)
 			{
-				int xor = A.get(i) ^ A.get(j);
-				int setBits = coutnSetBits(xor);
-				total = total + setBits % mod;
+				int number = A.get(j);
+				int numberToAnd = 1 << i;
+				int andResult = number & numberToAnd;
+				if(andResult == 0)
+				{
+					count0++;
+				}
+				else
+				{
+					count1++;
+				}
 			}
+			
+			totalBits = (totalBits + (((count0 * count1) * 2) % mod)) % mod;
 		}
-		return (int) total;
+		return ((int)totalBits);
     }
 	
 	public int coutnSetBits(int number)
